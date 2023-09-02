@@ -19,6 +19,7 @@ package io.invertase.googlemobileads;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -139,15 +140,16 @@ public class ReactNativeGoogleMobileAdsConsentModule extends ReactNativeModule {
   public void showForm(final Promise promise) {
     try {
       Activity currentActivity = getCurrentActivity();
-
+      Log.w("RNGoogleMobileAds", "getCurrentActivity");
       if (currentActivity == null) {
+        Log.w("RNGoogleMobileAds", "getCurrentActivity is null");
         rejectPromiseWithCodeAndMessage(
             promise,
             "null-activity",
             "Consent form attempted to show but the current Activity was null.");
         return;
       }
-
+      Log.w("RNGoogleMobileAds", "before runOnUiThread");
       currentActivity.runOnUiThread(
           () ->
               UserMessagingPlatform.loadConsentForm(
@@ -167,6 +169,8 @@ public class ReactNativeGoogleMobileAdsConsentModule extends ReactNativeModule {
                       rejectPromiseWithCodeAndMessage(
                           promise, "consent-form-error", formError.getMessage())));
     } catch (Exception e) {
+      Log.w("RNGoogleMobileAds", "Exception thrown: ");
+      Log.w("RNGoogleMobileAds", e);
       rejectPromiseWithCodeAndMessage(promise, "consent-form-error", e.toString());
     }
   }
